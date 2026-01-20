@@ -38,3 +38,53 @@ reset to the exact branch name you intend to use:
 git branch -r
 git reset --hard origin/<exact-remote-branch-name>
 ```
+
+### Manual Fix (if you cannot reset the branch)
+If you cannot reset or are unsure which branch has the fix, you can manually update
+the two files below to match the working configuration.
+
+1. **Update `airflow-ui/Dockerfile`** (remove root pip install):
+   ```bash
+   cat > airflow-ui/Dockerfile <<'EOF'
+   FROM apache/airflow:2.8.3
+
+   COPY dags/ /opt/airflow/dags/
+
+   ENV AIRFLOW__CORE__LOAD_EXAMPLES=False \
+       AIRFLOW__WEBSERVER__EXPOSE_CONFIG=True \
+       AIRFLOW__API__AUTH_BACKENDS=airflow.api.auth.backend.basic_auth
+
+   EXPOSE 8080
+
+   CMD ["bash", "-c", "airflow db init && airflow users create --role Admin --username admin --password admin --firstname Admin --lastname User --email admin@example.com && airflow webserver"]
+   EOF
+   ```
+
+2. **Update `docker-compose.yml`** (remove deprecated `version` key):
+   ```bash
+   cat > docker-compose.yml <<'EOF'
+   services:
+     airflow:
+       build: ./airflow-ui
+       ports:
+         - "8080:8080"
+       environment:
+         - AIRFLOW__API__AUTH_BACKENDS=airflow.api.auth.backend.basic_auth
+     fastapi-ui:
+       build: ./fastapi-ui
+       ports:
+         - "8000:8000"
+       environment:
+         - AIRFLOW_BASE_URL=http://airflow:8080
+         - AIRFLOW_USERNAME=admin
+         - AIRFLOW_PASSWORD=admin
+       depends_on:
+         - airflow
+   EOF
+   ```
+
+3. **Rebuild cleanly**:
+   ```bash
+   docker compose build --no-cache
+   docker compose up
+   ```
