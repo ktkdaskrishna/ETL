@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ dag_id }} Runs</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; }
+    th { background: #f5f5f5; }
+  </style>
+</head>
+<body>
+  <h1>DAG Runs for {{ dag_id }}</h1>
+  <a href="/">Back</a>
+  <table>
+    <thead>
+      <tr>
+        <th>Run ID</th>
+        <th>State</th>
+        <th>Execution Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for run in dag_runs %}
+      <tr>
+        <td>{{ run.dag_run_id }}</td>
+        <td>{{ run.state }}</td>
+        <td>{{ run.execution_date }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

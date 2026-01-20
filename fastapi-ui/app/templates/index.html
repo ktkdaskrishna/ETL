@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unified UI Platform</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    .card { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+    .actions { display: flex; gap: 0.5rem; }
+    .muted { color: #666; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h1>Unified UI Platform</h1>
+  <p class="muted">Manage Airflow workflows and prepare API deployments.</p>
+
+  <div class="card">
+    <h2>Trigger Workflow</h2>
+    <form method="post" action="/trigger">
+      <label>
+        DAG ID
+        <select name="dag_id">
+          {% for dag in dags %}
+          <option value="{{ dag.dag_id }}">{{ dag.dag_id }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <br /><br />
+      <label>
+        Dataset ID
+        <input type="text" name="dataset_id" value="sample_dataset" />
+      </label>
+      <br /><br />
+      <label>
+        Storage URI
+        <input type="text" name="storage_uri" value="s3://bucket/path" />
+      </label>
+      <br /><br />
+      <div class="actions">
+        <button type="submit">Trigger DAG</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Available Workflows</h2>
+    <ul>
+      {% for dag in dags %}
+      <li>
+        <strong>{{ dag.dag_id }}</strong> - <a href="/runs/{{ dag.dag_id }}">View Runs</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>API Deployment (Template)</h2>
+    <p>Create API endpoints based on workflow outputs by mapping dataset IDs to routes.</p>
+    <ul>
+      <li><strong>/api/v1/data/{dataset_id}</strong> - Serve curated datasets.</li>
+      <li><strong>/api/v1/metrics</strong> - Operational metrics.</li>
+    </ul>
+  </div>
+</body>
+</html>
