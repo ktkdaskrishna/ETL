@@ -39,6 +39,22 @@ git branch -r
 git reset --hard origin/<exact-remote-branch-name>
 ```
 
+### Optional Python Dependencies in the Airflow Image
+The base image already includes Airflow. If you need extra Python packages, install
+them as the `airflow` user to avoid the root pip error:
+
+```dockerfile
+FROM apache/airflow:2.8.3
+
+COPY requirements.txt /requirements.txt
+
+USER airflow
+RUN pip install --no-cache-dir -r /requirements.txt
+```
+
+If you must install OS packages, switch to `root` first, then return to `airflow`
+before running `pip install`.
+
 ### Manual Fix (if you cannot reset the branch)
 If you cannot reset or are unsure which branch has the fix, you can manually update
 the two files below to match the working configuration.
