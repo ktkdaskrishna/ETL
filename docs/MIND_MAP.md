@@ -1,0 +1,27 @@
+# Unified UI Platform Mind Map
+
+- Unified UI Platform
+  - Airflow UI Module (Docker Image 1)
+    - Workflow creation
+      - DAG templates
+      - Scheduling
+      - Validation
+    - Monitoring & logging
+      - DAG runs
+      - Task logs
+      - Alerts
+  - FastAPI UI Module (Docker Image 2)
+    - API creation
+      - Endpoint templates
+      - Schema definition
+    - Endpoint management
+      - Publish/unpublish
+      - Versioning
+      - Access control
+  - Integration Layer
+    - Data flow from Airflow to FastAPI
+      - Output metadata contract
+      - Artifact storage
+    - Unified user navigation
+      - Links between Airflow runs and API endpoints
+      - Status badges

@@ -1,0 +1,17 @@
+services:
+  airflow:
+    build: ./airflow-ui
+    ports:
+      - "8080:8080"
+    environment:
+      - AIRFLOW__API__AUTH_BACKENDS=airflow.api.auth.backend.basic_auth
+  fastapi-ui:
+    build: ./fastapi-ui
+    ports:
+      - "8000:8000"
+    environment:
+      - AIRFLOW_BASE_URL=http://airflow:8080
+      - AIRFLOW_USERNAME=admin
+      - AIRFLOW_PASSWORD=admin
+    depends_on:
+      - airflow
