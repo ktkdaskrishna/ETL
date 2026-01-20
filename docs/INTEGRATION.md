@@ -25,6 +25,11 @@ If `docker compose up --build` fails on macOS, verify the following before retry
 1. **Docker Desktop is running**: the whale icon should show "Docker Desktop is running".
 2. **Dockerfile does not run pip as root**: `airflow-ui/Dockerfile` should not include `USER root` or `RUN pip install ...`.
 3. **Compose file has no `version` key**: modern Docker Compose ignores `version`, but removing it avoids warnings.
+4. **Run Compose from your Mac terminal, not inside a container**: if your prompt looks like `sh-3.2#`,
+   run `exit` until you return to your Mac shell (e.g., `MacBook-Pro:ETL user$`), then run Docker Compose there.
+5. **Docker Compose is installed**: run `docker compose version`. If you see
+   `docker: 'compose' is not a docker command`, install or upgrade Docker Desktop, or use the legacy
+   `docker-compose` binary if it exists (`docker-compose --version`).
 
 If your local files still show the old content, update your branch to the latest remote:
 ```bash
